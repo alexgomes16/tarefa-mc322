@@ -1,23 +1,21 @@
-public class CartaDano {
+// Classe da carta de dano que é filha da classe Carta
 
-    private int custo;
-    private int dano;
+public class CartaDano extends Carta {
+    private final int dano;
 
     public CartaDano() {
-        this.custo = 2;
+        super("Tiro", "Causa 5 de dano ao inimigo", 2);
         this.dano = 5;
-    }
-
-    public int getCusto() {
-        return custo;
     }
 
     public int getDano() {
         return dano;
     }
 
-    public void usar(Inimigo inimigo) {
-        System.out.println("Você dispara sua espingarda causando " + dano + " de dano!");
+    // Ao usar, imprime a mensagem que voce usou a carta e da o dano no iminigo (chamando o metodo)
+    @Override
+    public void usar(Heroi heroi, Inimigo inimigo) {
+        System.out.println("Voce usa " + nome + " e causa " + dano + " de dano ao " + inimigo.getNome() + "!");
         inimigo.receberDano(dano);
     }
 }

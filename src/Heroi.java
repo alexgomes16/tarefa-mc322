@@ -1,39 +1,19 @@
-public class Heroi {
-    private int vida;
-    private int escudo;
+// Classe heroi que é filho da classe Entidade
+
+public class Heroi extends Entidade {
+    private final int vidaBase;
+    private final int escudoBase;
 
     public Heroi(int vidaInicial, int escudoInicial) {
-        this.vida = vidaInicial;
-        this.escudo = escudoInicial;
+        super("Investigador", vidaInicial, escudoInicial);
+        this.vidaBase = vidaInicial;
+        this.escudoBase = escudoInicial;
     }
 
-    public int getVida() {
-        return vida;
-    }
-
-    public int getEscudo() {
-        return escudo;
-    }
-
-    public boolean estaVivo() {
-        return vida > 0;
-    }
-
-    public void adicionarEscudo(int quantidade) {
-        this.escudo += quantidade;
-    }
-
-    public void receberDano(int quantidade) {
-        System.out.println("Investigador recebe " + quantidade + " de dano (aplicado ao escudo antes da vida).");
-        if (escudo >= quantidade) {
-            escudo -= quantidade;
-            System.out.println("O escudo absorveu todo o dano. Escudo restante: " + escudo);
-        } else {
-            int restante = quantidade - escudo;
-            escudo = 0;
-            vida -= restante;
-            System.out.println("Escudo quebrou. Investigador perde " + restante + " de vida.");
-            if (vida < 0) vida = 0;
-        }
+    // Esse metodo é para entre as batalhas o heroi recuperar sua vida e seu escudo inicial
+    public void restaurarBase() {
+        this.vida = vidaBase;
+        this.escudo = escudoBase;
+        System.out.println("Investigador restaura seus status para vida: " + vida + " | escudo: " + escudo);
     }
 }

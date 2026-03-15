@@ -1,42 +1,30 @@
-public class Inimigo {
-    private int vida;
-    private int escudo;
-    private int ataque;
+//Classe que representa um inimido, que é filha da classe Entidade
 
-    public Inimigo(int vidaInicial, int escudoInicial, int ataque) {
-        this.vida = vidaInicial;
-        this.escudo = escudoInicial;
+public abstract class Inimigo extends Entidade {
+    protected int ataque;
+    protected String intencaoDescricao;
+
+    public Inimigo(String nome, int vidaInicial, int escudoInicial, int ataque) {
+        super(nome, vidaInicial, escudoInicial);
         this.ataque = ataque;
+        this.intencaoDescricao = "";
     }
 
-    public int getVida() {
-        return vida;
+    public int getAtaque() {
+        return ataque;
     }
 
-    public int getEscudo() {
-        return escudo;
+    public abstract void anunciarIntencao();
+
+    public abstract void executarAcao(Heroi heroi);
+
+    public String getIntencaoDescricao() {
+        return intencaoDescricao;
     }
 
-    public boolean estaVivo() {
-        return vida > 0;
-    }
-
-    public void receberDano(int quantidade) {
-        System.out.println("Fantasma recebe " + quantidade + " de dano (aplicado ao escudo antes da vida).");
-        if (escudo >= quantidade) {
-            escudo -= quantidade;
-            System.out.println("O defesa imaterial do fantasma absorveu todo o dano. Escudo restante: " + escudo);
-        } else {
-            int restante = quantidade - escudo;
-            escudo = 0;
-            vida -= restante;
-            System.out.println("Defesa do fantasma quebra. Fantasma perde " + restante + " de vida.");
-            if (vida < 0) vida = 0;
-        }
-    }
-
-    public void atacar(Heroi heroi) {
-        System.out.println("Fantasma ataca e causa " + ataque + " de dano.");
-        heroi.receberDano(ataque);
+    //Metodo que da dano no heroi, chamando o metodo da classe heroi de dar dano nele
+    protected void atacar(Heroi heroi) {
+        System.out.println(this.nome + " ataca e causa " + this.ataque + " de dano.");
+        heroi.receberDano(this.ataque);
     }
 }
