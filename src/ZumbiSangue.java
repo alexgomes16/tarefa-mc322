@@ -1,38 +1,51 @@
-//Classe do Zumbi de Sangue, é o segundo inimigo do jogo, com status maiores que o Fantasma, e é filha da classe Inimigo
+// Representa o segundo inimigo do jogo, um zumbi de sangue, um inimigo com status melhores, e mais complexo
+
 import java.util.Random;
 
 public class ZumbiSangue extends Inimigo {
-    private enum TipoIntencao { ATACAR, GANHAR_ESCUDO }
+
+    private enum TipoIntencao { ATACAR, DEFENDER, SANGRAR }
     private TipoIntencao intencaoEscolhida;
+
     private final Random rng = new Random();
 
     public ZumbiSangue(int vidaInicial, int escudoInicial, int ataque) {
         super("Zumbi de Sangue", vidaInicial, escudoInicial, ataque);
-        this.intencaoEscolhida = TipoIntencao.ATACAR;
     }
 
-    // O zumbi pode atacar ou ganhar escudo (se defender), então ele anuncia a intensão correspondente e no final do turno executa
     @Override
     public void anunciarIntencao() {
-        boolean escolheAtacar = rng.nextBoolean();
-        if (escolheAtacar) {
+        // Aqui vai escolher aleatoriamente qual ação o zumbi irá fazer, podendo atacar, usar escudo ou aplicar sangramento
+        int escolha = rng.nextInt(3);
+
+        if (escolha == 0) {
             intencaoEscolhida = TipoIntencao.ATACAR;
-            this.intencaoDescricao = "Atacar (" + this.ataque + ")";
+            intencaoDescricao = "Atacar (" + ataque + ")";
+        } else if (escolha == 1) {
+            intencaoEscolhida = TipoIntencao.DEFENDER;
+            intencaoDescricao = "Ganhar escudo (3)";
         } else {
-            intencaoEscolhida = TipoIntencao.GANHAR_ESCUDO;
-            int ganho = 3;
-            this.intencaoDescricao = "Se defender: ganha escudo (" + ganho + ")";
+            intencaoEscolhida = TipoIntencao.SANGRAR;
+            intencaoDescricao = "Aplicar Sangramento (1)";
         }
     }
 
     @Override
     public void executarAcao(Heroi heroi) {
-        if (intencaoEscolhida == TipoIntencao.ATACAR) {
-            atacar(heroi);
-        } else {
-            int ganho = 3;
-            System.out.println(this.nome + " se defende e ganha " + ganho + " de escudo.");
-            this.ganharEscudo(ganho);
+        // E aqui executa a ação escolhida, 
+        switch (intencaoEscolhida) {
+            case ATACAR:
+                atacar(heroi);
+                break;
+            case DEFENDER:
+                System.out.println(nome + " se defende e ganha escudo!");
+                ganharEscudo(3);
+                break;
+            case SANGRAR:
+                System.out.println("O zumbi rasga sua carne causando sangramento!");
+                EfeitoSangramento efeito = new EfeitoSangramento(heroi, App.publisher, 1);
+                App.publisher.inscrever(efeito);
+                break;
         }
     }
 }
