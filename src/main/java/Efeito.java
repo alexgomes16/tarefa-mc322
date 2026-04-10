@@ -1,5 +1,6 @@
-// Classe que representa um efeito do jogo, no qual é filha do Subscriber
-
+/**
+ * Classe que representa um efeito do jogo, no qual é filha do Subscriber
+ */
 public abstract class Efeito implements Subscriber {
     
     protected String nome;
@@ -14,6 +15,11 @@ public abstract class Efeito implements Subscriber {
         this.acumulos = acumulos;
     }
 
+    /**
+     * Metodo que soma bonus, acumulando eles
+     * 
+     * @param valor do bonus
+     */
     public void adicionarAcumulo(int valor) {
         acumulos += valor;
     }

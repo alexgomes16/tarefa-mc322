@@ -1,8 +1,9 @@
-// Classe que representa uma entidade do jogo, seja o heroi ou o inimigo
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe que representa uma entidade do jogo, seja o heroi ou o inimigo
+ */
 public abstract class Entidade {
 
     protected String nome;
@@ -32,6 +33,11 @@ public abstract class Entidade {
         return vida > 0;
     }
 
+    /**
+     * Metodo que aplica e acumula o efeito na entidade
+     * 
+     * @param novo Novo efeito
+     */
     public void aplicarEfeito(Efeito novo) {
         for (Efeito efeito : efeitos) {
             if (efeito.getNome().equals(novo.getNome())) {
@@ -44,10 +50,18 @@ public abstract class Entidade {
         novo.publisher.inscrever(novo);
     }
 
+    /**
+     * Metodo que remove o efeito de uma entidade
+     * 
+     * @param efeito efeito que vai ser removido
+     */
     public void removerEfeito(Efeito efeito) {
         efeitos.remove(efeito);
     }
 
+    /**
+     * Metodo que lista todos os efeitos que estão sendo aplicados na entidade
+     */
     public String listarEfeitos() {
         if (efeitos.isEmpty()) {
             return "Nenhum efeito em uso";
@@ -60,6 +74,11 @@ public abstract class Entidade {
         return sb.toString();
     }
 
+    /**
+     * Metodo que a entidade recebe um dano
+     * 
+     * @param dano dano recebido pela entidade
+     */
     public void receberDano(int dano) {
 
         System.out.println(nome + " recebe " + dano + " de dano.");
@@ -88,11 +107,19 @@ public abstract class Entidade {
         }
     }
 
+    /**
+     * Metodo da entidade ganhar escudo
+     * 
+     * @param valor quantidade de escudo ganho pela entidade
+     */
     public void ganharEscudo(int valor) {
         escudo += valor;
         System.out.println(nome + " ganha " + valor + " de escudo.");
     }
 
+    /**
+     * Metodo que zera o escudo da entidade
+     */
     public void zerarEscudo() {
         escudo = 0;
     }

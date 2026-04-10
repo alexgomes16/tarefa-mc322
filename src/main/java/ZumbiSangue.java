@@ -1,7 +1,8 @@
-// Representa o segundo inimigo do jogo, um zumbi de sangue, um inimigo com status melhores, e mais complexo
-
 import java.util.Random;
 
+/**
+ * Representa o segundo inimigo do jogo, um zumbi de sangue, um inimigo com status melhores, e mais complexo
+ */
 public class ZumbiSangue extends Inimigo {
 
     private enum TipoIntencao { ATACAR, DEFENDER, SANGRAR }
@@ -13,6 +14,9 @@ public class ZumbiSangue extends Inimigo {
         super("Zumbi de Sangue", vidaInicial, escudoInicial, ataque);
     }
 
+    /**
+     * Metodo que faz o Zumbi anunciar sua inteção ao final do turno, podendo ser atacar, ganhar escudo ou aplicar sangramento
+     */
     @Override
     public void anunciarIntencao() {
         // Aqui vai escolher aleatoriamente qual ação o zumbi irá fazer, podendo atacar, usar escudo ou aplicar sangramento
@@ -30,6 +34,11 @@ public class ZumbiSangue extends Inimigo {
         }
     }
 
+    /**
+     * Metodo no qual o Zumbi executa a ação, conforme sua intensão
+     * 
+     * @param heroi Representa o heroi/jogador (investigador)
+     */
     @Override
     public void executarAcao(Heroi heroi) {
         // E aqui executa a ação escolhida, 

@@ -1,5 +1,6 @@
-// Classe que representa qualquer carta do jogo (de dano ou escudo basicamente)
-
+/**
+ * Classe que representa qualquer carta do jogo (de dano ou escudo basicamente)
+ */
 public abstract class Carta {
     protected String nome;
     protected String descricao;
@@ -23,5 +24,11 @@ public abstract class Carta {
         return custo;
     }
 
+    /**
+     * metodo que usa a carta, ou seja, cada carta vai usar esse metodo fazendo o que a carta faz
+     * 
+     * @param heroi representa o jogador
+     * @param inimigo representa o inimigo 
+     */
     public abstract void usar(Heroi heroi, Inimigo inimigo);
 }
