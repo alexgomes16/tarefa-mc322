@@ -1,11 +1,15 @@
-// Classe que representa a carta de bala amaldiçoada do jogo, que é a filha da classe Carta
-
+/**
+ * Classe que representa a carta de bala amaldiçoada do jogo, que é a filha da classe Carta
+ */
 public class CartaBalaAmaldicoada extends Carta {
 
     public CartaBalaAmaldicoada() {
         super("Bala Amaldicoada", "Proximo ataque recebe +1", 1);
     }
 
+    /**
+     * Metodo que usa a carta, aplicando o efeito e imprimindo a mensagem para o usuario
+     */
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
 

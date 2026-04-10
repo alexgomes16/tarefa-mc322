@@ -1,8 +1,9 @@
-// Classe Publisher, que é importante para o Padrão Observer exigido
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe Publisher, que é importante para o Padrão Observer
+ */
 public class Publisher {
 
     private List<Subscriber> subscribers;

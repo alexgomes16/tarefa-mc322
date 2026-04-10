@@ -8,6 +8,9 @@ public class App {
     public static Publisher publisher = new Publisher();
     private static final int CARTAS_POR_TURNO = 3;
 
+    /**
+     * Aqui é o fluxo principal do jogo, onde vai rodar todas as batalhas e ciclos do jogo
+     */
     public static void main(String[] args) {
 
         Scanner entrada = new Scanner(System.in);
@@ -67,6 +70,9 @@ public class App {
         entrada.close();
     }
 
+    /**
+     * Aqui é a batalha em si, onde vai ter os looping dos turnos, as cartas que o heroi pode usar, verificação de energia, se o inimigo ou o heroi morreu, etc
+     */
     private static boolean batalha(Scanner entrada, Heroi heroi, Inimigo inimigo, List<Carta> compra, List<Carta> mao, List<Carta> descarte) {
 
         int turno = 1;
@@ -220,6 +226,9 @@ public class App {
         return baralho;
     }
 
+    /**
+     * Aqui onde vai montar a pilha de compras do jogador e verificar se a pilha de compras está vazia ou não, e reembaralhar caso estiver vazio
+     */
     private static void comprarCartas(List<Carta> compra, List<Carta> descarte, List<Carta> mao, int qtd) {
 
         for (int i = 0; i < qtd; i++) {
