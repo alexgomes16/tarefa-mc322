@@ -4,31 +4,51 @@
 
 Nesse jogo você se torna um investigador paranormal, no qual foi designado para investigar a Mansão Leone, uma mansão no qual é habitada por diversas criaturas horrendas. 
 
-Agora voce enfrentará duas criaturas horrendas, um fantasma que assombra a casa, e um terrivel Zumbi de Sangue que habita um dos quarto da mansão. Para isso você possui uma espinguarda, e tres habilidade, a primeira voce realiza um ritual, colocando em sua arma uma maldição que a deixa mais poderosa, a segunda voce realiza um ritual que confere a voce uma proteção contra seu inimigo e por ultimo mas não menos importante, voce consegue desferir um corte ritualistico em seu inimigo, que o deixará sangrando e sofrendo. Mas realizar essas ações consome sua energia, o que abrirá espaço para a terrível criatura te contra-atacar, tome cuidado. 
+Agora voce enfrentará duas criaturas horrendas, um fantasma que assombra a casa, e um terrivel Zumbi de Sangue que habita um dos quarto da mansão. Para isso você possui uma espinguarda, e também consegue realizar rituais poderosos, voce conhece 7 rituais: o primeiro voce realiza um ritual, colocando em sua arma uma maldição que a deixa mais poderosa, a segunda voce realiza um ritual que confere a voce uma proteção contra seu inimigo, o terceiro voce consegue desferir um corte ritualistico em seu inimigo, que o deixará sangrando e sofrendo, o quarto voce gera uma poderosa descarga eletrica contra o seu inimigo lhe ferindo ainda mais, o quinto voce deixa o inimigo mais indefeso, o sexto voce prende o seu inimigo em uma redoma eterea, não podendo te tocar, e em setimo voce deixa o inimigo mais lento no tempo. Mas realizar essas ações consome sua energia, o que abrirá espaço para a terrível criatura te contra-atacar, tome cuidado. Para isso, voce leva consigo um alimento energético, onde lhe restaura parte de sua energia para continuar a batalha.
 
-Para essa terceira tarefa, foi adicionado as cartas de efeito, as cartas de sangramento (que funciona como o veneno), e a bala amaldiçoada (que funciona como a força no exemplo dado no enunciado). Então o segundo inimigo Zumbi de Sangue, consegue também usar a carta de efeito de sangramento, além do ataque e da defesa que ele já fazia, o que deixa os turnos um pouco mais complexos, e a batalha mais cruel. 
+Será que voce sobreviverá a essa Mansão Amaldiçoada?
 
 # Jogabilidade
 
 Em cada turno você começa com 3 de energia, e voce pode escolher entre quatro cartas, essas cartas porém são embaralhas na pilha de compra e a cada turno voce comprará cartas, assim poderá usar as cartas de jogar, no fim do turno (seja porque voce encerrou seja porque ficou sem energia), essas cartas irão para a pilha de descarte. Se as cartas da pilha de compras acabar, o jogo irá pegar as cartas da pilha de descarte, embaralhar e montar uma nova pilha de compras. As opções de ação são: 
 
 1. **Carta de Tiro**
-   - Causa dano ao inimigo
+   - Causa 5 de dano ao inimigo
    - Custo: 2 de energia
 
 2. **Carta de Escudo**
-   - Concede escudo ao jogador
+   - Concede 5 de escudo ao jogador
    - Custo: 1 de energia
 
 3. **Carta de Sangramento**
-   - Ao final do turno o inimigo sofre o dado de sangramento, que é acumulável. 
+   - Carta acumulavel, onde da +1 de dano no inimigo ao final do turno 
    - Custo: 1 de energia
 
 4. **Carta de Bala Amaldiçoada**
-   - Concede +1 no so seu tiro
+   - Concede +1 no dano do seu tiro (esse efeito é acumulavel e acaba ao dar um tiro)
    - Custo: 1 de energia
 
-5. **Encerrar turno**
+5. **Carta de Eletrocussão**
+   - Ritual que da 8 de dano no inimigo
+   - Custo: 3 de energia
+
+6. **Carta de Antidefesa**
+   - Ritual que remove 2 do escudo do inimigo
+   - Custo: 1 de energia
+
+7. **Carta de Alimento energético**
+   - Confere +2 de energia ao heroi
+   - Custo: não gasta energia
+
+8. **Carta de Aprisionamento**
+   - O ritual tem 40% de chance de impedir que o inimigo faça a ação dele no turno dele
+   - Custo: 2 de energia
+
+9. **Carta de Lentidão**
+   - Ritual que diminui o dano do inimigo em -1
+   - Custo: 1 de energia
+
+10. **Encerrar turno**
 
 Quando você encerrar seu turno ou então ficar sem energia o inimigo irá fazer uma ação, podendo ser um ataque (dar dano), uma defesa (adquirir escudo), ou então te aplicar sangramento (1 de dano ao final do turno)
 
@@ -40,7 +60,9 @@ Detalhes do código é que eu tive que mudar os textos do jogo pois cada acento 
 
 Decidi colocar esses textos mais descritivos e com história para incrementar essa primeira tarefa (e me fazer dormir menos), e ser mais entendível para quem está jogando. Mas os textos são apenas um print básico se algo acontecer e/ou mostrando atributos dos objetos naquele momento (como vida, energia, escudo, etc).
 
-Implementei o padrão Observer, atráves das classes Publisher e Subscriber e o sistema de efeitos como dito anteriormente. Tudo utilizando o encapsulamento, como na tarefa anterior
+Para essa quarta tarefa, eu refatorei o meu projeto para utilizar o Gradle, alterando a estrutura de pastas e instalando a ferramenta no projeto. Além disso adicionei 5 novas cartas (que serão explicadas a seguir), e além disso documentei o código utilizando o Javadoc, explicando as classes e principais metodos (e seus retornos e/ou parametros).
+
+Além disso, arrumei melhor o padrão Observer do efeito de bala amaldiçoada que foi um ponto de erro na tarefa anterior. 
 
 # Como rodar o projeto
 
@@ -48,12 +70,12 @@ Implementei o padrão Observer, atráves das classes Publisher e Subscriber e o 
 
 - Compile o projeto:
 ```
-javac -d bin $(find src -name "*.java")
+./gradlew build
 ```
 
 - Execute o projeto:
 ```
-java -cp bin App
+./gradlew run 
 ```
 
 E por fim, aproveite o jogo e acabe com o mal dessa Mansão.
