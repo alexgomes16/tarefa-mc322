@@ -12,10 +12,17 @@ public class CartaDano extends Carta {
      */
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
+        // Pega o bonus da bala amaldiçoada e aumenta no dano do heroi e imprime a mensagem do ataque do heroi
+        int bonus = heroi.consumirBonusDano();
+        int danoFinal = 5 + bonus;
+        System.out.println("Voce usa " + nome + " e causa " + danoFinal + " de dano!");
 
-        int dano = 5 + heroi.consumirBonusDano();
+        // Imprime o bonus da bala amaldiçoada para o jogador
+        if (bonus > 0) {
+            System.out.println("A bala amaldiçoada aumenta o dano em +" + bonus + "!");
+        }
 
-        System.out.println("Voce dispara e causa " + dano + " de dano!");
-        inimigo.receberDano(dano);
+        // Então da o dano no inimigo
+        inimigo.receberDano(danoFinal);
     }
 }
