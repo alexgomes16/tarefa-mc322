@@ -59,4 +59,14 @@ public class Heroi extends Entidade {
         this.vida = 20;
         this.escudo = 1;
     }
+
+    /**
+     * Metodo que faz o heroi ganhar energia
+     * 
+     * @param valor quantidade que aumenta a energia
+     */
+    public void ganharEnergia(int valor) {
+        energia += valor;
+        System.out.println("Energia aumentada em +" + valor + "!");
+    }
 }

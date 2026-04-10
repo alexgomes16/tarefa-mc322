@@ -39,7 +39,25 @@ public abstract class Inimigo extends Entidade {
      * @param heroi Representa o heroi/jogador (investigador)
      */
     protected void atacar(Heroi heroi) {
-        System.out.println(this.nome + " ataca e causa " + this.ataque + " de dano.");
-        heroi.receberDano(this.ataque);
+        // Aqui notifica o efeito antes do ataque
+        App.publisher.notificar();
+    
+        int danoFinal = this.ataque;
+    
+        // Imprime a mensagem do ataque do inimigo e depois da o dano no heroi
+        System.out.println(this.nome + " ataca e causa " + danoFinal + " de dano.");
+        heroi.receberDano(danoFinal);
+    }
+
+    // Inimigo não começa atordoado
+    protected boolean atordoado = false;
+
+    /**
+     * Metodo que coloca se o inimigo está atordoado ou não
+     * 
+     * @param valor true ou false (se está ou não atordoado)
+     */
+    public void setAtordoado(boolean valor) {
+        this.atordoado = valor;
     }
 }

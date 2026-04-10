@@ -50,11 +50,10 @@ public class ZumbiSangue extends Inimigo {
                 System.out.println(nome + " se defende e ganha escudo!");
                 ganharEscudo(3);
                 break;
-            case SANGRAR:
-                System.out.println("O zumbi rasga sua carne causando sangramento!");
-                EfeitoSangramento efeito = new EfeitoSangramento(heroi, App.publisher, 1);
-                App.publisher.inscrever(efeito);
-                break;
+                case SANGRAR:
+                    System.out.println("O zumbi rasga sua carne causando sangramento!");
+                    heroi.aplicarEfeito(new EfeitoSangramento(heroi, App.publisher, 1));
+                    break;
         }
     }
 }

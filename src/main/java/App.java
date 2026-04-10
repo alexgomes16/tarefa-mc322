@@ -187,8 +187,13 @@ public class App {
             System.out.println("O " + inimigo.getNome() + " age:");
             System.out.println("----------------------------------------");
 
-            // Turno acaba, e o inimigo age
-            inimigo.executarAcao(heroi);
+            // Turno acaba, e o inimigo age se não estiver atordoado
+            if (inimigo.atordoado) {
+                System.out.println(inimigo.getNome() + " esta aprisionado e nao consegue agir!");
+                inimigo.atordoado = false;
+            } else {
+                inimigo.executarAcao(heroi);
+            }
 
             System.out.println("----------------------------------------");
 
@@ -209,7 +214,7 @@ public class App {
         // Aqui cria o baralho inicial, adicionando x quantidade de cartas de cada tipo e embaralha no final
 
         List<Carta> baralho = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             baralho.add(new CartaDano());
         }
         for (int i = 0; i < 3; i++) {
@@ -220,6 +225,21 @@ public class App {
         }
         for (int i = 0; i < 2; i++) {
             baralho.add(new CartaBalaAmaldicoada());
+        }
+        for (int i = 0; i < 2; i++) {
+            baralho.add(new CartaEletrocussao());
+        }
+        for (int i = 0; i < 3; i++) {
+            baralho.add(new CartaAntidefesa());
+        }
+        for (int i = 0; i < 3; i++) {
+            baralho.add(new CartaEnergia());
+        }
+        for (int i = 0; i < 3; i++) {
+            baralho.add(new CartaAprisionamento());
+        }
+        for (int i = 0; i < 3; i++) {
+            baralho.add(new CartaLentidao());
         }
 
         Collections.shuffle(baralho);
