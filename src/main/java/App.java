@@ -6,214 +6,200 @@ import java.util.Scanner;
 public class App {
 
     public static Publisher publisher = new Publisher();
-    private static final int CARTAS_POR_TURNO = 3;
 
     /**
      * Aqui é o fluxo principal do jogo, onde vai rodar todas as batalhas e ciclos do jogo
      */
     public static void main(String[] args) {
-
         Scanner entrada = new Scanner(System.in);
 
-        // Imprime a mensagem de inicio do jogo 
-        System.out.println("Voce foi enviado para a Casa Leone para acabar com uma criatura sobrenatural que la habita, boa sorte");
-        System.out.println(".");
-        System.out.println(".");
-        System.out.println(".");
-        System.out.println(".");
-        System.out.println("Ao entrar na casa voce se depara com uma criatura horrenda fantasmagorica, mate-a ou voce sera a proxima vitima dessa Casa amaldicoada");
-        System.out.println();
-        System.out.println("Aperte ENTER para iniciar a batalha...");
+        // Imprime o texto inicial do jogo
+        System.out.println("Voce e um investigador paranormal e foi enviado para a Casa Leone para acabar com uma criatura sobrenatural que la habita, carregando sua fiel espingarda, boa sorte");
+        System.out.println("Aperte ENTER para continuar...");
         entrada.nextLine();
 
-        // Cria o heroi e o primeiro inimigo que é o fantasma
-        Heroi heroi = new Heroi(20, 1);
-        Fantasma fantasma = new Fantasma(10, 2, 6);
-
-        // Inicia o sistema de baralho também
-        List<Carta> pilhaCompra = criarBaralhoInicial();
-        List<Carta> mao = new ArrayList<>();
-        List<Carta> descarte = new ArrayList<>();
-
-        // Inicia a primeira batalha
-        boolean venceuPrimeira = batalha(entrada, heroi, fantasma, pilhaCompra, mao, descarte);
-
-        // Verifica se o jogador vencer a primeira batalha, caso não tenha vencido quebra o jogo aqui
-        if (!venceuPrimeira) {
-            entrada.close();
-            return;
-        }
-
-        // Imprime a mensagem de vitória e introdução da segunda batalha
-        System.out.println();
-        System.out.println("Voce derrotou a terrivel criatura, mas algo pior surge...");
-        System.out.println("Um Zumbi de Sangue aparece diante de voce!");
+        System.out.println(".");
+        System.out.println(".");
+        System.out.println(".");
+        System.out.println(".");
+        System.out.println("Voce se depara com a imponente Casa Leone, o local onde a sua familia foi massacrada e seus corpos agora se transformaram em terriveis criaturas.");
+        System.out.println("Voce abre a porta e entra no Hall de Entrada");
         System.out.println();
         System.out.println("Aperte ENTER para continuar...");
         entrada.nextLine();
 
-        // Heroi restaura seus status
-        heroi.restaurarBase();
+        // Então cria o heroi e as pilhas de cartas do jogador
+        Heroi heroi = new Heroi(20, 3);
 
-        // Cria o segundo inimigo: o zumbi
-        ZumbiSangue zumbi = new ZumbiSangue(14, 3, 7);
+        List<Carta> pilhaCompra = criarBaralhoInicial();
+        List<Carta> mao = new ArrayList<>();
+        List<Carta> descarte = new ArrayList<>();
 
-        // Inicia a segunda batalha
-        boolean venceuSegunda = batalha(entrada, heroi, zumbi, pilhaCompra, mao, descarte);
-
-        // Imprime a mensagem de vitória
-        if (venceuSegunda) {
-            System.out.println();
-            System.out.println("Parabens, voce livrou a Casa Leone do mal!");
-        }
+        // Então entra no sistema de mapas jo jogo (cria o mapa e explora ele)
+        Mapa mapa = Mapa.criarMapa();
+        explorarMapa(entrada, heroi, mapa.getRaiz(), pilhaCompra, mao, descarte);
 
         entrada.close();
     }
 
-    /**
-     * Aqui é a batalha em si, onde vai ter os looping dos turnos, as cartas que o heroi pode usar, verificação de energia, se o inimigo ou o heroi morreu, etc
-     */
-    private static boolean batalha(Scanner entrada, Heroi heroi, Inimigo inimigo, List<Carta> compra, List<Carta> mao, List<Carta> descarte) {
+    private static void explorarMapa(Scanner entrada, Heroi heroi, NoMapa atual, List<Carta> pilhaCompra, List<Carta> mao, List<Carta> descarte) {
 
-        int turno = 1;
-
-        while (heroi.estaVivo() && inimigo.estaVivo()) {
-
+        boolean primeiroNo = true;
+        boolean primeiraBatalha = true;
+    
+        while (atual != null && heroi.estaVivo()) {
+    
             System.out.println();
             System.out.println("========================================");
-            System.out.println("               TURNO " + turno);
+            System.out.println(atual.getNome());
             System.out.println("========================================");
-
-            heroi.iniciarTurno();
-            inimigo.anunciarIntencao();
-
-            // Aqui imprime os efeitos do fim do turno, e não mostra no primeiro turno, pois não tem como ter efeitos no primeiro turno
-            if (turno > 1) {
+    
+            // Imprime o texto da primeira batalha
+            if (primeiroNo) {
                 System.out.println();
-                System.out.println("Aplicando efeitos...");
-
-                if (!publisher.temSubscribers()) {
-                    System.out.println("Nenhum efeito em uso.");
-                } else {
-                    publisher.notificar();
-                }
-            }
-
-            // Compra as cartas 
-            comprarCartas(compra, descarte, mao, CARTAS_POR_TURNO);
-
-            // Imprime os status do heroi e do inimigo (e a intenção do inimigo)
-            System.out.println();
-            System.out.println("Status:");
-            System.out.println(heroi.getNome() + " - Vida: " + heroi.getVida() + " | Escudo: " + heroi.getEscudo());
-            System.out.println(inimigo.getNome() + " - Vida: " + inimigo.getVida() + " | Escudo: " + inimigo.getEscudo());
-            System.out.println("Intencao do " + inimigo.getNome() + ": " + inimigo.getIntencaoDescricao());
-
-            boolean fimTurno = false;
-
-            while (!fimTurno && heroi.getEnergia() > 0 && heroi.estaVivo() && inimigo.estaVivo()) {
-
-                // Imprime a energia do jogador
+                System.out.println("Voce se depara com uma criatura horrenda fantasmagorica, mate-a ou voce sera a proxima vitima dessa Casa amaldicoada");
                 System.out.println();
-                System.out.println("----------------------------------------");
-                System.out.println("Energia: " + heroi.getEnergia());
-                System.out.println("Mao:");
-
-                // Imprime a mão do jogador e a opção de finalizar turno
-                for (int i = 0; i < mao.size(); i++) {
-                    Carta carta = mao.get(i);
-                    System.out.println((i + 1) + ") " + carta.getNome() + " - " + carta.getDescricao() + " (Custo: " + carta.getCusto() + ")");
-                }
-
-                System.out.println((mao.size() + 1) + ") Finalizar turno");
-                System.out.print("> ");
-
-                // Então pega e guarda a escolha do jogador
-                String input = entrada.nextLine();
-                int escolha;
-
-                try {
-                    escolha = Integer.parseInt(input);
-                } catch (Exception e) {
-                    escolha = -1;
-                }
-
-                System.out.println("----------------------------------------");
-
-                if (escolha >= 1 && escolha <= mao.size()) {
-
-                    Carta carta = mao.get(escolha - 1);
-
-                    if (heroi.gastarEnergia(carta.getCusto())) {
-                        // Se for uma opção válida e tiver energia eu uso essa carta, coloco na pilha de descarta e removo ela da mão do jogador
-                        carta.usar(heroi, inimigo);
-
-                        descarte.add(carta);
-                        mao.remove(escolha - 1);
-
-                    } else {
-                        // Caso não tenha energia, avisa o jogador
-                        System.out.println("Energia insuficiente.");
-                    }
-
-                } else if (escolha == mao.size() + 1) {
-                    // Caso tenha escolhido encerrar o turno
-                    fimTurno = true;
-                    System.out.println("Voce encerrou o turno.");
-
-                } else {
-                    System.out.println("Opcao invalida.");
-                }
-
-                System.out.println("----------------------------------------");
-                System.out.println("Pressione ENTER...");
+                System.out.println("Aperte ENTER para iniciar a batalha...");
                 entrada.nextLine();
+                primeiroNo = false;
             }
-            // Verifica se a energia do jogador acabou e avisa isso caso sim
-            if (heroi.getEnergia() == 0) {
-                System.out.println("Sua energia acabou!");
+    
+            if (atual.isBatalha()) {
+    
+                List<NoMapa> proximos = atual.getFilhosNaoVisitados();
+                boolean proximoEhEvento = proximos.size() == 1 && proximos.get(0).isEvento();
+                boolean proximoEhFinal = proximos.size() == 1 && proximos.get(0).isFinalDoMapa();
+                boolean ehHall = atual.getNome().equals("Hall de entrada");
+    
+                if (atual.isFinalDoMapa()) {
+                    // Imprime o texto especial da ultima batalha
+                    System.out.println();
+                    System.out.println("Voce segue para: " + atual.getNome());
+                    System.out.println();
+                    System.out.println("Pressione ENTER...");
+                    entrada.nextLine();
+    
+                    System.out.println("========================================");
+                    System.out.println(atual.getNome());
+                    System.out.println("========================================");
+                    System.out.println();
+    
+                    heroi.curarSemMensagem(5);
+    
+                    System.out.println(atual.getDescricao());
+                    System.out.println();
+                    System.out.println("Voce retoma sua espingarda em maos e se prepara para a batalha!");
+                    System.out.println();
+                    System.out.println("Pressione ENTER...");
+                    entrada.nextLine();
+    
+                } else if (!primeiraBatalha) {
+                    // Imprime o texto de encontro com um inimigo, depois da primeira batalha (a primeira e a ultima batalha tem textos especiais)
+                    System.out.println();
+                    System.out.println("Voce abre a porta e se depara com um " + atual.getInimigo().getNome() + ".");
+                    System.out.println("Voce retoma sua espingarda em maos e se prepara para a batalha!");
+                }
+    
+                // Então após os textos iniciais, roda a batalha
+                Batalha batalha = new Batalha(entrada, heroi, pilhaCompra, mao, descarte);
+                boolean venceu = batalha.executar(atual.getInimigo());
+    
+                // Verifica se o jogador perdeu a batalha
+                if (!venceu) {
+                    return;
+                }
+    
+                primeiraBatalha = false;
+    
+                proximos = atual.getFilhosNaoVisitados();
+                proximoEhEvento = proximos.size() == 1 && proximos.get(0).isEvento();
+                proximoEhFinal = proximos.size() == 1 && proximos.get(0).isFinalDoMapa();
+                ehHall = atual.getNome().equals("Hall de entrada");
+    
+                // Imprime a mensagem que o heroi ingere o item de cura entre duas batalhas
+                if (!atual.isFinalDoMapa() && !ehHall && !proximoEhEvento && !proximoEhFinal) {
+                    System.out.println();
+                    System.out.println("No meio do caminho voce pega um de seus frascos de lodo e ingere ele, recuperando parte de sua vitalidade (+5 de vida)");
+                    heroi.curar(5);
+                }
+    
+                // Mensagem caso venceu a ultima batalha
+                if (atual.isFinalDoMapa()) {
+                    System.out.println();
+                    System.out.println("Voce, ferido, ve a criatura cair na sua frente, sua missao foi cumprida, voce livrou a casa do mal.");
+                    return;
+                }
+    
+            } else if (atual.isEvento()) {
+                boolean continua = atual.executarAcao(entrada, heroi);
+                if (!continua) {
+                    return;
+                }
             }
-
-            descarte.addAll(mao);
-            mao.clear();
-
-            // Verifica se o inimigo está vivo, caso não imprime a mensagem de vitória
-            if (!inimigo.estaVivo()) {
-                System.out.println("Voce derrotou " + inimigo.getNome() + "!");
-                return true;
+    
+            // Então marca o local atual como visitado, ve os proximos lugares do mapa
+            atual.marcarVisitado();
+            List<NoMapa> proximos = atual.getFilhosNaoVisitados();
+    
+            // Verifica se tem um proximo lugar no mapa
+            if (proximos.isEmpty()) {
+                return;
             }
-
-            System.out.println();
-            System.out.println("O " + inimigo.getNome() + " age:");
-            System.out.println("----------------------------------------");
-
-            // Turno acaba, e o inimigo age se não estiver atordoado
-            if (inimigo.atordoado) {
-                System.out.println(inimigo.getNome() + " esta aprisionado e nao consegue agir!");
-                inimigo.atordoado = false;
-            } else {
-                inimigo.executarAcao(heroi);
-            }
-
-            System.out.println("----------------------------------------");
-
-            // Verifica se o heroi está vivo, se não estiver, imprime a mensagem de game over
-            if (!heroi.estaVivo()) {
-                System.out.println();
-                System.out.println("Game Over, voce foi derrotado...");
-                return false;
-            }
-
-            turno++;
+    
+            // E então o jogador escolhe o proximo lugar para ir no mapa
+            atual = escolherProximoNo(entrada, proximos);
         }
-
-        return heroi.estaVivo();
     }
 
-    private static List<Carta> criarBaralhoInicial() {
-        // Aqui cria o baralho inicial, adicionando x quantidade de cartas de cada tipo e embaralha no final
+    /**
+     * Metodo que apresenta o proximo lugar para o jogador e ele escolhe para onde ir
+     * 
+     * @return lugar escolhido pelo jogador (ou o unico caminho que o heroi tem também)
+     */
+    private static NoMapa escolherProximoNo(Scanner entrada, List<NoMapa> opcoes) {
+        if (opcoes.size() == 1) {
+            // Caso só tenha um caminho para ir, então retorna esse caminho unico
+            NoMapa unico = opcoes.get(0);
+            System.out.println();
+            System.out.println("Voce segue para: " + unico.getNome());
+            return unico;
+        }
 
+        while (true) {
+            System.out.println();
+            System.out.println("Ao derrotar o inimigo voce enxerga duas portas por onde seguir, por onde voce quer ir:");
+
+            // Então imprime as opções para o jogador escolher
+            for (int i = 0; i < opcoes.size(); i++) {
+                System.out.println((i + 1) + ") " + opcoes.get(i).getNome());
+            }
+
+            // Pega a resposta do jogador
+            System.out.print("> ");
+            String input = entrada.nextLine().trim();
+
+            int escolha;
+            try {
+                escolha = Integer.parseInt(input);
+            } catch (Exception e) {
+                escolha = -1;
+            }
+
+            // Retorna a escolha do jogador
+            if (escolha >= 1 && escolha <= opcoes.size()) {
+                return opcoes.get(escolha - 1);
+            }
+
+            System.out.println("Opcao invalida.");
+        }
+    }
+
+    /**
+     * Aqui que vai criar o baralho inicial do jogador e embaralha ela com todas as cartas
+     */
+    private static List<Carta> criarBaralhoInicial() {
         List<Carta> baralho = new ArrayList<>();
+
         for (int i = 0; i < 4; i++) {
             baralho.add(new CartaDano());
         }
@@ -229,7 +215,7 @@ public class App {
         for (int i = 0; i < 2; i++) {
             baralho.add(new CartaEletrocussao());
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             baralho.add(new CartaAntidefesa());
         }
         for (int i = 0; i < 3; i++) {
@@ -241,33 +227,11 @@ public class App {
         for (int i = 0; i < 3; i++) {
             baralho.add(new CartaLentidao());
         }
+        for (int i = 0; i < 3; i++) {
+            baralho.add(new CartaFrascoLodo());
+        }
 
         Collections.shuffle(baralho);
         return baralho;
-    }
-
-    /**
-     * Aqui onde vai montar a pilha de compras do jogador e verificar se a pilha de compras está vazia ou não, e reembaralhar caso estiver vazio
-     */
-    private static void comprarCartas(List<Carta> compra, List<Carta> descarte, List<Carta> mao, int qtd) {
-
-        for (int i = 0; i < qtd; i++) {
-
-            if (compra.isEmpty()) {
-                // Caso a pilha de compras estiver vazia, vai avisar o jogador e embaralhar de novo
-                if (descarte.isEmpty()) {
-                    System.out.println("Sem cartas para comprar.");
-                    return;
-                }
-
-                compra.addAll(descarte);
-                descarte.clear();
-                Collections.shuffle(compra);
-
-                System.out.println("Baralho reembaralhado.");
-            }
-
-            mao.add(compra.remove(0));
-        }
     }
 }

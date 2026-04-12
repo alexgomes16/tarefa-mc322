@@ -1,17 +1,33 @@
 import java.util.Random;
 
 /**
- * Representa o segundo inimigo do jogo, um zumbi de sangue, um inimigo com status melhores, e mais complexo
+ * Representa um dos inimigos do jogo, um zumbi de sangue, um inimigo com status melhores, e mais complexo
  */
 public class ZumbiSangue extends Inimigo {
 
-    private enum TipoIntencao { ATACAR, DEFENDER, SANGRAR }
-    private TipoIntencao intencaoEscolhida;
+    protected enum TipoIntencao {
+        ATACAR,
+        DEFENDER,
+        SANGRAR
+    }
 
-    private final Random rng = new Random();
+    protected final Random rng = new Random();
+    protected final int escudoAoDefender;
+    protected final int sangramentoAoSangrar;
+    protected TipoIntencao intencaoEscolhida;
+
+    public ZumbiSangue() {
+        this("Zumbi de Sangue", 10, 3, 6, 3, 1);
+    }
 
     public ZumbiSangue(int vidaInicial, int escudoInicial, int ataque) {
-        super("Zumbi de Sangue", vidaInicial, escudoInicial, ataque);
+        this("Zumbi de Sangue", vidaInicial, escudoInicial, ataque, 3, 1);
+    }
+
+    protected ZumbiSangue(String nome, int vidaInicial, int escudoInicial, int ataque, int escudoAoDefender, int sangramentoAoSangrar) {
+        super(nome, vidaInicial, escudoInicial, ataque);
+        this.escudoAoDefender = escudoAoDefender;
+        this.sangramentoAoSangrar = sangramentoAoSangrar;
     }
 
     /**
@@ -27,10 +43,10 @@ public class ZumbiSangue extends Inimigo {
             intencaoDescricao = "Atacar (" + ataque + ")";
         } else if (escolha == 1) {
             intencaoEscolhida = TipoIntencao.DEFENDER;
-            intencaoDescricao = "Ganhar escudo (3)";
+            intencaoDescricao = "Ganhar escudo (" + escudoAoDefender + ")";
         } else {
             intencaoEscolhida = TipoIntencao.SANGRAR;
-            intencaoDescricao = "Aplicar Sangramento (1)";
+            intencaoDescricao = "Aplicar Sangramento (" + sangramentoAoSangrar + ")";
         }
     }
 
@@ -39,21 +55,24 @@ public class ZumbiSangue extends Inimigo {
      * 
      * @param heroi Representa o heroi/jogador (investigador)
      */
+
     @Override
     public void executarAcao(Heroi heroi) {
-        // E aqui executa a ação escolhida, 
+        // E aqui executa a ação escolhida
         switch (intencaoEscolhida) {
             case ATACAR:
                 atacar(heroi);
                 break;
+
             case DEFENDER:
                 System.out.println(nome + " se defende e ganha escudo!");
-                ganharEscudo(3);
+                ganharEscudo(escudoAoDefender);
                 break;
-                case SANGRAR:
-                    System.out.println("O zumbi rasga sua carne causando sangramento!");
-                    heroi.aplicarEfeito(new EfeitoSangramento(heroi, App.publisher, 1));
-                    break;
+
+            case SANGRAR:
+                System.out.println("O zumbi rasga sua carne causando sangramento!");
+                heroi.aplicarEfeito(new EfeitoSangramento(heroi, App.publisher, sangramentoAoSangrar));
+                break;
         }
     }
 }

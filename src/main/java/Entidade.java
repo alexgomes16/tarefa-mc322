@@ -9,7 +9,6 @@ public abstract class Entidade {
     protected String nome;
     protected int vida;
     protected int escudo;
-
     protected List<Efeito> efeitos;
 
     public Entidade(String nome, int vida, int escudo) {
@@ -19,14 +18,16 @@ public abstract class Entidade {
         this.efeitos = new ArrayList<>();
     }
 
-    public String getNome() { 
-        return nome; 
+    public String getNome() {
+        return nome;
     }
-    public int getVida() { 
-        return vida; 
+
+    public int getVida() {
+        return vida;
     }
-    public int getEscudo() { 
-        return escudo; 
+
+    public int getEscudo() {
+        return escudo;
     }
 
     public boolean estaVivo() {
@@ -60,6 +61,13 @@ public abstract class Entidade {
     }
 
     /**
+     * Metodo que limpa todos os efeitos ativos
+     */
+    public void limparEfeitos() {
+        efeitos.clear();
+    }
+
+    /**
      * Metodo que lista todos os efeitos que estão sendo aplicados na entidade
      */
     public String listarEfeitos() {
@@ -71,7 +79,7 @@ public abstract class Entidade {
         for (Efeito efeito : efeitos) {
             sb.append(efeito.getString()).append(" ");
         }
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     /**
@@ -115,6 +123,19 @@ public abstract class Entidade {
     public void ganharEscudo(int valor) {
         escudo += valor;
         System.out.println(nome + " ganha " + valor + " de escudo.");
+    }
+
+    /**
+     * Metodo que reduz uma quantidade do escudo da entidade
+     * 
+     * @param valor quantidade que reduz 
+     */
+    public void reduzirEscudo(int valor) {
+        escudo -= valor;
+        if (escudo < 0) {
+            escudo = 0;
+        }
+        System.out.println(nome + " perde " + valor + " de escudo. Escudo restante: " + escudo);
     }
 
     /**
