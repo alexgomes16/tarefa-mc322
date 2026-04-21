@@ -64,8 +64,29 @@ Quando você encerrar seu turno ou então ficar sem energia o inimigo irá fazer
 
 O jogo acaba quando voce derrotar os dois inimigos dessa casa, livrando-a do mal, ou então acabar morrendo na mãos dessas criaturas, boa sorte.
 
-# Mapa:
-(adicionar a representação do mapa do jogo)
+# Mapa
+
+                [Suíte Principal]
+                  (Boss Final)
+                   /     \
+                  /       \
+        [Biblioteca]     [Quarto de Hóspedes]
+          (Zumbi)          (Zumbi Bestial)
+             |                |
+       [Sala de Jantar]       |
+         (Fantasma)           |
+              \              /
+               \            /
+                 [Escada]
+          (Decisão: subir ou fugir)
+               /            \
+              /              \
+       [Cozinha]         [Sala de Estar]
+       (Fantasma)          (Zumbi)
+              \          /
+               \        /
+           [Hall de Entrada]
+              (Fantasma)
 
 # Código:
 
@@ -77,7 +98,7 @@ Para essa quinta tarefa eu adicionei o sistema de mapa no jogo, onde o jogador a
 
 Um momento diferente do jogo é a da escada, onde o jogo pergunta se o jogador deseja subir as escadas, caso escolha que sim, o jogo continue, porém caso escolhe não o jogo acaba, pois o heroi fugiu de medo da mansão. 
 
-Por fim, também foi adicionado (casos de teste)
+Por fim, também foi adicionado casos de teste para o projeto
 
 # Como rodar o projeto
 
