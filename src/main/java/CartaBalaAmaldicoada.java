@@ -3,8 +3,11 @@
  */
 public class CartaBalaAmaldicoada extends Carta {
 
+    private int bonus;
+
     public CartaBalaAmaldicoada() {
-        super("Bala Amaldicoada", "Proximo ataque recebe +1", 1);
+        super("Bala Amaldicoada", "Proximo tiro recebe +1", 1);
+        this.bonus = 1;
     }
 
     /**
@@ -12,10 +15,16 @@ public class CartaBalaAmaldicoada extends Carta {
      */
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
+        System.out.println("Voce prepara uma bala amaldicoada...");
+        heroi.aplicarEfeito(new EfeitoBalaAmaldicoada(heroi, App.publisher, bonus));
+    }
 
-        System.out.println("Voce amaldicoada sua arma com um ritual!");
-
-        Efeito efeito = new EfeitoBalaAmaldicoada(heroi, App.publisher, 1);
-        heroi.aplicarEfeito(efeito);
+    /**
+     * Metodo que melhora a carta, aumentando o bonus no tiro
+     */
+    @Override
+    public void melhorar() {
+        bonus += 1;
+        descricao = "Proximo tiro recebe +" + bonus;
     }
 }

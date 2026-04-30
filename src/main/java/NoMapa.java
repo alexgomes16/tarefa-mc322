@@ -3,33 +3,22 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Aqui representa um nó da arvore (que é o mapa do jogo), onde pode ser uma batalha ou um evento
+ * Aqui representa um nó da arvore (que é o mapa do jogo), onde pode ser uma batalha ou um evento (escada)
  */
 public class NoMapa {
 
     private final String nome;
     private final String descricao;
-    private final Inimigo inimigo;
-    private final AcaoNoMapa acao;
+    private final Evento evento;
     private final boolean finalDoMapa;
     private final List<NoMapa> filhos;
     private boolean visitado;
 
-    public NoMapa(String nome, String descricao, Inimigo inimigo, boolean finalDoMapa) {
+    public NoMapa(String nome, String descricao, Evento evento, boolean finalDoMapa) {
         this.nome = nome;
         this.descricao = descricao;
-        this.inimigo = inimigo;
-        this.acao = null;
+        this.evento = evento;
         this.finalDoMapa = finalDoMapa;
-        this.filhos = new ArrayList<>();
-    }
-
-    public NoMapa(String nome, String descricao, AcaoNoMapa acao) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.inimigo = null;
-        this.acao = acao;
-        this.finalDoMapa = false;
         this.filhos = new ArrayList<>();
     }
 
@@ -41,20 +30,23 @@ public class NoMapa {
         return descricao;
     }
 
-    public Inimigo getInimigo() {
-        return inimigo;
-    }
-
     public boolean isBatalha() {
-        return inimigo != null;
+        return evento instanceof Batalha;
     }
 
     public boolean isEvento() {
-        return acao != null;
+        return !(evento instanceof Batalha);
     }
 
     public boolean isFinalDoMapa() {
         return finalDoMapa;
+    }
+
+    public Inimigo getInimigo() {
+        if (evento instanceof Batalha) {
+            return ((Batalha) evento).getInimigo();
+        }
+        return null;
     }
 
     public void adicionarFilho(NoMapa filho) {
@@ -75,10 +67,7 @@ public class NoMapa {
         visitado = true;
     }
 
-    public boolean executarAcao(Scanner entrada, Heroi heroi) {
-        if (acao == null) {
-            return true;
-        }
-        return acao.executar(entrada, heroi);
+    public boolean iniciar(Jogo jogo, Scanner entrada) {
+        return evento.iniciar(jogo, entrada);
     }
 }

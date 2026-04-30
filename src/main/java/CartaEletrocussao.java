@@ -3,8 +3,11 @@
  */
 public class CartaEletrocussao extends Carta {
 
+    private int dano;
+
     public CartaEletrocussao() {
-        super("Eletrocussao", "Causa 8 de dano", 3);
+        super("Ritual de Eletrocussao", "Causa 8 de dano", 3);
+        this.dano = 8;
     }
 
     /**
@@ -13,6 +16,15 @@ public class CartaEletrocussao extends Carta {
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
         System.out.println("Voce invoca um ritual de eletrocussao!");
-        inimigo.receberDano(8);
+        inimigo.receberDano(dano);
+    }
+
+    /**
+     * Metodo que melhora a carta, onde aumenta o dano da carta
+     */
+    @Override
+    public void melhorar() {
+        dano += 1;
+        descricao = "Causa " + dano + " de dano";
     }
 }

@@ -39,16 +39,17 @@ public abstract class Entidade {
      * 
      * @param novo Novo efeito
      */
-    public void aplicarEfeito(Efeito novo) {
-        for (Efeito efeito : efeitos) {
-            if (efeito.getNome().equals(novo.getNome())) {
-                efeito.adicionarAcumulo(novo.getAcumulos());
+    public void aplicarEfeito(Efeito novoEfeito) {
+        for (Efeito efeitoExistente : efeitos) {
+    
+            if (efeitoExistente.getClass().equals(novoEfeito.getClass())) {
+                efeitoExistente.acumulos += novoEfeito.acumulos;
                 return;
             }
         }
-
-        efeitos.add(novo);
-        novo.publisher.inscrever(novo);
+    
+        efeitos.add(novoEfeito);
+        App.publisher.inscrever(novoEfeito);
     }
 
     /**

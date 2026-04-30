@@ -5,26 +5,36 @@ import java.util.Random;
  */
 public class CartaAprisionamento extends Carta {
 
-    private Random rng = new Random();
+    private final Random rng = new Random();
+    private int chance;
 
     public CartaAprisionamento() {
-        super("Aprisionamento", "40% de chance de impedir o inimigo", 2);
+        super("Ritual de Aprisionamento", "40% de chance de impedir a acao do inimigo", 2);
+        this.chance = 40;
     }
 
     /**
-     * Metodo de usa a carta, no qual tem 40% de chance de impedir que o inimigo faça o ataque no fim do turno
+     * Metodo de usa a carta, no qual tem 40% de chance de impedir que o inimigo faça a ação no fim do turno
      */
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
+        System.out.println("Voce tenta aprisionar a criatura...");
 
-        System.out.println("Voce tenta aprisionar o inimigo...");
-
-        // Verifica se o numero aleatório (rng), e menor de 40 (para ser 40% de chance), e se for imprime a mensagem e deixa o inimigo atordoado
-        if (rng.nextInt(100) < 40) {
+        // Verifica se o numero aleatório (rng), e menor que a chance (essa chance pode aumentar, caso o jogador melhore essa carta), e se for imprime a mensagem e deixa o inimigo atordoado
+        if (rng.nextInt(100) < chance) {
             System.out.println("O inimigo foi aprisionado e nao ira agir!");
             inimigo.setAtordoado(true);
         } else {
             System.out.println("O ritual falhou!");
         }
+    }
+
+    /**
+     * Metodo que melhora a carta, onde aumenta 5% de chance do aprisionamento funcionar
+     */
+    @Override
+    public void melhorar() {
+        chance += 5;
+        descricao = chance + "% de chance de impedir a acao do inimigo";
     }
 }

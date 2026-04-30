@@ -44,14 +44,13 @@ public class TesteBatalha {
      */
     @Test
     void batalhaPodeTerminarComDerrota() {
-        Heroi heroi = new Heroi(20, 3);
+        Heroi heroi = new Heroi(10, 0);
 
         List<Carta> compra = new ArrayList<>();
         List<Carta> mao = new ArrayList<>();
         List<Carta> descarte = new ArrayList<>();
 
-        String input = "1\n\n4\n\n4\n\n4\n\n4\n\n4\n\n4\n\n4\n\n";
-        Scanner entrada = new Scanner(input);
+        Scanner entrada = new Scanner("1\n\n\n\n\n");
         Batalha batalha = new Batalha(entrada, heroi, compra, mao, descarte);
 
         boolean venceu = batalha.executar(new TesteInimigo("Inimigo Forte", 20, 0, 50));

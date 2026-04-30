@@ -51,22 +51,26 @@ public class TesteMapa {
         NoMapa evento = new NoMapa(
                 "Evento de Teste",
                 "",
-                (Scanner entrada, Heroi heroi) -> {
-                    heroi.ganharEnergia(1);
-                    return true;
-                }
+                new Escolha() {
+                    @Override
+                    public boolean iniciar(Jogo jogo, Scanner entrada) {
+                        jogo.getHeroi().ganharEnergia(1);
+                        return true;
+                    }
+                },
+                false
         );
 
         Heroi heroi = new Heroi(20, 3);
-        heroi.iniciarTurno();
+        Jogo jogo = new Jogo(heroi);
 
-        boolean continua = evento.executarAcao(
-                new Scanner(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8))),
-                heroi
+        boolean continua = evento.iniciar(
+                jogo,
+                new Scanner(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)))
         );
 
         assertTrue(continua);
-        assertEquals(4, heroi.getEnergia());
+        assertEquals(1, heroi.getEnergia());
         assertTrue(evento.isEvento());
     }
 }

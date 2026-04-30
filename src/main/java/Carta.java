@@ -1,5 +1,5 @@
 /**
- * Classe que representa qualquer carta do jogo (de dano ou escudo basicamente)
+ * Classe que representa qualquer carta do jogo
  */
 public abstract class Carta {
     protected String nome;
@@ -12,16 +12,16 @@ public abstract class Carta {
         this.custo = custo;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNome() { 
+        return nome; 
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescricao() { 
+        return descricao; 
     }
-
-    public int getCusto() {
-        return custo;
+    
+    public int getCusto() { 
+        return custo; 
     }
 
     /**
@@ -31,4 +31,9 @@ public abstract class Carta {
      * @param inimigo representa o inimigo 
      */
     public abstract void usar(Heroi heroi, Inimigo inimigo);
+
+    /**
+     * Metodo que melhora a carta, isso é possivel depois de uma batalha, caso o jogador queira fazer essa ação
+     */
+    public abstract void melhorar();
 }
