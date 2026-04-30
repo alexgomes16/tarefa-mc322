@@ -1,26 +1,56 @@
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * Classe que representa e controla o combate do jogo, tirando a responsabilidade do App fazer isso
  */
-public class Batalha {
+public class Batalha implements Evento {
 
     private static final int CARTAS_POR_TURNO = 3;
 
-    private final Scanner entrada;
-    private final Heroi heroi;
-    private final List<Carta> pilhaCompra;
-    private final List<Carta> mao;
-    private final List<Carta> descarte;
+    private final Inimigo inimigo;
+    private final boolean entregarRecompensa;
+    private Scanner entradaLegado;
+    private Heroi heroiLegado;
+    private List<Carta> pilhaCompraLegado;
+    private List<Carta> maoLegado;
+    private List<Carta> descarteLegado;
 
+    public Batalha(Inimigo inimigo) {
+        this(inimigo, true);
+    }
+
+    public Batalha(Inimigo inimigo, boolean entregarRecompensa) {
+        this.inimigo = inimigo;
+        this.entregarRecompensa = entregarRecompensa;
+    }
+
+    /**
+     * Construtor legado, para o App antigo ainda compilar.
+     */
     public Batalha(Scanner entrada, Heroi heroi, List<Carta> pilhaCompra, List<Carta> mao, List<Carta> descarte) {
-        this.entrada = entrada;
-        this.heroi = heroi;
-        this.pilhaCompra = pilhaCompra;
-        this.mao = mao;
-        this.descarte = descarte;
+        this.inimigo = null;
+        this.entregarRecompensa = false;
+        this.entradaLegado = entrada;
+        this.heroiLegado = heroi;
+        this.pilhaCompraLegado = pilhaCompra;
+        this.maoLegado = mao;
+        this.descarteLegado = descarte;
+    }
+
+    public Inimigo getInimigo() {
+        return inimigo;
+    }
+
+    /**
+     * Metodo para iniciar a batalha 
+     */
+    @Override
+    public boolean iniciar(Jogo jogo, Scanner entrada) {
+        if (inimigo == null) {
+            throw new IllegalStateException("Esta batalha foi criada no modo legado e nao pode usar iniciar(Jogo, Scanner).");
+        }
+        return executarCombate(jogo, entrada, inimigo);
     }
 
     /**
@@ -30,9 +60,22 @@ public class Batalha {
      * @return true caso o jogador vença, e false caso o jogador perca
      */
     public boolean executar(Inimigo inimigo) {
+        if (entradaLegado == null || heroiLegado == null || pilhaCompraLegado == null
+                || maoLegado == null || descarteLegado == null) {
+            throw new IllegalStateException("Esta batalha foi criada no modo novo e nao pode usar executar(Inimigo).");
+        }
+
+        Jogo jogo = new Jogo(heroiLegado, pilhaCompraLegado, maoLegado, descarteLegado);
+        return executarCombate(jogo, entradaLegado, inimigo);
+    }
+
+    private boolean executarCombate(Jogo jogo, Scanner entrada, Inimigo inimigo) {
+        Heroi heroi = jogo.getHeroi();
+
         App.publisher = new Publisher();
         heroi.limparEfeitos();
         inimigo.limparEfeitos();
+        heroi.iniciarBatalha();
 
         int turno = 1;
 
@@ -58,21 +101,25 @@ public class Batalha {
                     App.publisher.notificar();
                 }
 
-                // Verifica se o heroi ou o inimigo morreu após os efeitos serem executados
+                // Verifica se o heroi ou o inimigo morreu após os efeitos serem executados e finaliza o combate
                 if (!heroi.estaVivo() || !inimigo.estaVivo()) {
-                    finalizarCombate(inimigo);
+                    finalizarCombate(jogo, inimigo);
                     if (!heroi.estaVivo()) {
                         System.out.println();
                         System.out.println("Game Over, voce foi derrotado...");
+                        return false;
                     } else {
                         System.out.println();
                         System.out.println("Voce derrotou " + inimigo.getNome() + "!");
+                        if (entregarRecompensa) {
+                            new EventoPosBatalha().iniciar(jogo, entrada);
+                        }
+                        return true;
                     }
-                    return heroi.estaVivo();
                 }
             }
 
-            comprarCartas(CARTAS_POR_TURNO);
+            jogo.comprarCartas(CARTAS_POR_TURNO);
 
             // Imprime os status do heroi e do inimigo
             System.out.println();
@@ -92,38 +139,36 @@ public class Batalha {
                 System.out.println("Mao:");
 
                 // Imprime a mão atual do jogador, e a opção de encerrar o turno
-                for (int i = 0; i < mao.size(); i++) {
-                    Carta carta = mao.get(i);
-                    System.out.println((i + 1) + ") " + carta.getNome() + " - " + carta.getDescricao() + " (Custo: " + carta.getCusto() + ")");
+                for (int i = 0; i < jogo.getMao().size(); i++) {
+                    Carta c = jogo.getMao().get(i);
+                    System.out.println((i + 1) + ") " + c.getNome() + " - " + c.getDescricao() + " (Custo: " + c.getCusto() + ")");
                 }
 
-                System.out.println((mao.size() + 1) + ") Finalizar turno");
+                System.out.println((jogo.getMao().size() + 1) + ") Finalizar turno");
                 System.out.print("> ");
 
                 // Pega a escolha do jogador
-                String input = entrada.nextLine().trim();
                 int escolha;
-
                 try {
-                    escolha = Integer.parseInt(input);
+                    escolha = Integer.parseInt(entrada.nextLine().trim());
                 } catch (Exception e) {
                     escolha = -1;
                 }
 
                 System.out.println("----------------------------------------");
 
-                if (escolha >= 1 && escolha <= mao.size()) {
-                    Carta carta = mao.get(escolha - 1);
+                if (escolha >= 1 && escolha <= jogo.getMao().size()) {
+                    Carta carta = jogo.getMao().get(escolha - 1);
 
                     // Com a escolha do jogador, caso tenha energia, vai usar a carta, e colocar ela na pilha de descarte
                     if (heroi.gastarEnergia(carta.getCusto())) {
                         carta.usar(heroi, inimigo);
-                        descarte.add(carta);
-                        mao.remove(escolha - 1);
+                        jogo.getDescarte().add(carta);
+                        jogo.getMao().remove(escolha - 1);
                     } else {
                         System.out.println("Energia insuficiente.");
                     }
-                } else if (escolha == mao.size() + 1) {
+                } else if (escolha == jogo.getMao().size() + 1) {
                     fimTurno = true;
                     System.out.println("Voce encerrou o turno.");
                 } else {
@@ -132,7 +177,9 @@ public class Batalha {
 
                 System.out.println("----------------------------------------");
                 System.out.println("Pressione ENTER...");
-                entrada.nextLine();
+                if (entrada.hasNextLine()) {
+                    entrada.nextLine();
+                }
             }
 
             // Mensagem caso acabe a energia
@@ -140,13 +187,16 @@ public class Batalha {
                 System.out.println("Sua energia acabou!");
             }
 
-            passarMaoParaDescarte();
+            jogo.descartarMao();
 
             // Verifica se o inimigo morreu, se sim imprime uma mensagem de vitoria e returna true
             if (!inimigo.estaVivo()) {
-                finalizarCombate(inimigo);
+                finalizarCombate(jogo, inimigo);
                 System.out.println();
                 System.out.println("Voce derrotou " + inimigo.getNome() + "!");
+                if (entregarRecompensa) {
+                    new EventoPosBatalha().iniciar(jogo, entrada);
+                }
                 return true;
             }
 
@@ -164,11 +214,13 @@ public class Batalha {
 
             System.out.println("----------------------------------------");
             System.out.println("Pressione ENTER...");
-            entrada.nextLine();
+            if (entrada.hasNextLine()) {
+                entrada.nextLine();
+            }
 
             // Verifica se o heroi morreu, e se sim, finaliza o combate, imprime a mensagem de derrota e retorna false
             if (!heroi.estaVivo()) {
-                finalizarCombate(inimigo);
+                finalizarCombate(jogo, inimigo);
                 System.out.println();
                 System.out.println("Game Over, voce foi derrotado...");
                 return false;
@@ -177,52 +229,16 @@ public class Batalha {
             turno++;
         }
 
-        finalizarCombate(inimigo);
+        finalizarCombate(jogo, inimigo);
         return heroi.estaVivo();
     }
 
     /**
-     * Metodo do jogador comprar cartas
-     * 
-     * @param quantidade de cartas
+     * Metodo onde vai finalizar o combate descartando a mão do jogador, e limpando os efeitos
      */
-    private void comprarCartas(int quantidade) {
-        for (int i = 0; i < quantidade; i++) {
-            if (pilhaCompra.isEmpty()) {
-                if (descarte.isEmpty()) {
-                    System.out.println("Sem cartas para comprar.");
-                    return;
-                }
-
-                pilhaCompra.addAll(descarte);
-                descarte.clear();
-                Collections.shuffle(pilhaCompra);
-
-                System.out.println("Baralho reembaralhado.");
-            }
-
-            mao.add(pilhaCompra.remove(0));
-        }
-    }
-
-    /**
-     * Caso a mão ainda esteja com cartas, vai colocar essas cartas na pilha de descarte
-     */
-    private void passarMaoParaDescarte() {
-        if (!mao.isEmpty()) {
-            descarte.addAll(mao);
-            mao.clear();
-        }
-    }
-
-    /**
-     * Metodo do final da batalha, onde limpa os efeitos do heroi e do inimigo e coloca as cartas da mão do jogador para a pilha de descarte
-     * 
-     * @param inimigo representa o inimigo
-     */
-    private void finalizarCombate(Inimigo inimigo) {
-        passarMaoParaDescarte();
-        heroi.limparEfeitos();
+    private void finalizarCombate(Jogo jogo, Inimigo inimigo) {
+        jogo.descartarMao();
+        jogo.getHeroi().finalizarBatalha();
         inimigo.limparEfeitos();
     }
 }

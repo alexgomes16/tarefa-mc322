@@ -14,8 +14,15 @@ public class EfeitoSangramento extends Efeito {
     public void serNotificado() {
 
         if (acumulos > 0) {
-            System.out.println(dono.getNome() + " sofre " + acumulos + " de dano por sangramento!");
-            dono.receberDano(acumulos);
+            int danoFinal = acumulos;
+
+            if (dono instanceof Heroi) {
+                Heroi heroi = (Heroi) dono;
+                danoFinal = Math.max(0, acumulos - heroi.getRedutorSangramentoRecebido());
+            }
+
+            System.out.println(dono.getNome() + " sofre " + danoFinal + " de dano por sangramento!");
+            dono.receberDano(danoFinal);
 
             acumulos--;
 

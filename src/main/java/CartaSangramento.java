@@ -3,8 +3,11 @@
  */
 public class CartaSangramento extends Carta {
 
+    private int sangramento;
+
     public CartaSangramento() {
-        super("Sangramento", "Aplica sangramento (1)", 1);
+        super("Sangramento", "Aplica 1 de sangramento", 1);
+        this.sangramento = 1;
     }
 
     /**
@@ -12,10 +15,20 @@ public class CartaSangramento extends Carta {
      */
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
-
+        int sangramentoFinal = sangramento + heroi.getBonusSangramentoCausado();
         System.out.println("Voce causa sangramento no " + inimigo.getNome() + "!");
+        if (heroi.getBonusSangramentoCausado() > 0) {
+            System.out.println("A Faca Afiada aumenta o sangramento em +" + heroi.getBonusSangramentoCausado() + "!");
+        }
+        inimigo.aplicarEfeito(new EfeitoSangramento(inimigo, App.publisher, sangramentoFinal));
+    }
 
-        Efeito efeito = new EfeitoSangramento(inimigo, App.publisher, 1);
-        inimigo.aplicarEfeito(efeito);
+    /**
+     * Metodo que melhora a carta, onde aumenta o dano de sangramento em +1
+     */
+    @Override
+    public void melhorar() {
+        sangramento += 1;
+        descricao = "Aplica " + sangramento + " de sangramento";
     }
 }

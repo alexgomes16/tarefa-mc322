@@ -3,8 +3,11 @@
  */
 public class CartaFrascoLodo extends Carta {
 
+    private int cura;
+
     public CartaFrascoLodo() {
         super("Frasco de Lodo", "Recupera 5 de vida", 1);
+        this.cura = 5;
     }
 
     /**
@@ -12,7 +15,16 @@ public class CartaFrascoLodo extends Carta {
      */
     @Override
     public void usar(Heroi heroi, Inimigo inimigo) {
-        System.out.println("Voce bebe o Frasco de Lodo e recupera 5 de vida.");
-        heroi.curar(5);
+        System.out.println("Voce bebe o Frasco de Lodo e recupera " + cura + " de vida.");
+        heroi.curar(cura);
+    }
+
+    /**
+     * Metodo que melhora a carta, aumentando a recuperação de vida em 1
+     */
+    @Override
+    public void melhorar() {
+        cura += 1;
+        descricao = "Recupera " + cura + " de vida";
     }
 }
