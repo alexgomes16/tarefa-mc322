@@ -10,7 +10,9 @@ Nos comodos da sala voce pode enfrentar outras duas crituras, além do fantasma 
 
 Para isso você possui uma espinguarda, e também consegue realizar rituais poderosos, voce conhece 7 rituais: o primeiro voce realiza um ritual, colocando em sua arma uma maldição que a deixa mais poderosa, a segunda voce realiza um ritual que confere a voce uma proteção contra seu inimigo, o terceiro voce consegue desferir um corte ritualistico em seu inimigo, que o deixará sangrando e sofrendo, o quarto voce gera uma poderosa descarga eletrica contra o seu inimigo lhe ferindo ainda mais, o quinto voce deixa o inimigo mais indefeso, o sexto voce prende o seu inimigo em uma redoma eterea, não podendo te tocar, e em setimo voce deixa o inimigo mais lento no tempo. 
 
-Entretanto, realizar essas ações consome sua energia, o que abrirá espaço para a terrível criatura te contra-atacar, tome cuidado. Para isso, voce leva consigo um alimento energético, onde lhe restaura parte de sua energia para continuar a batalha. Além disso, voce carrega consigo um pequeno frasco que carrega um liquido viscoço e preto, conhecido com Lodo, onde ao ingerir de seu conteúdo, voce recupera parte de sua vitalidade e seus machucados são recuperados.
+Entretanto, realizar essas ações consome sua energia, o que abrirá espaço para a terrível criatura te contra-atacar, tome cuidado. Para isso, voce leva consigo um alimento energético, onde lhe restaura parte de sua energia para continuar a batalha. Além disso voce leva consigo alguns Frascos de Lodo e Bandagens, utensílios necessários para restaurar parte de sua vitalidade. 
+
+Entre cada batalha cruel voce consegue encontrar itens espalhados pela Mansão, ou então parar um pouco e pensar sobre suas habilidades e no que pode melhorar
 
 Será que voce sobreviverá a essa Mansão Amaldiçoada?
 
@@ -88,17 +90,50 @@ O jogo acaba quando voce derrotar os dois inimigos dessa casa, livrando-a do mal
            [Hall de Entrada]
               (Fantasma)
 
+# Recompensas:
+
+Após uma batalha ardua o investigador possui algumas opções, antes de seguir em frente, podendo realizar uma das seguintes ações:
+
+1. **Rever Habilidade**
+   Voce realiza modificações no seu baralho, podendo: melhorar carta, adicionar uma carta ou remover uma carta
+
+2. **Itens Básicos**
+   Irá aparecer tres itens diferentes para o investigador, ele tem tempo de pegar apenas um item. Esses itens lhe dão um bonus único para a a proxima batalha não ser a última da vida do investigador paranormal
+
+3. **Itens consumiveis**
+   Voce leva consigo dois itens: Frascos de Lodo e bandagens, porém eles são limitados, afinal voce não conseguiria carregar infinitos objetos com voce, apesar de habilidoso, voce não é tão forte assim. Então voce carregou com voce apenas 2 Frascos de Lodo e 3 Bandagens, sendo assim deve escolher bem o momento que deve usar cada um deles
+
+Descrição mais detalhada de cada opção de Rever Habilidade:
+
+- Melhoria em uma carta: O bônus da carta +1, ou seja, se usar na carta de tiro, o dano dessa carta fica em +1, se usar na do escudo o escudo fica em +1 e assim por diante (para a carta de  aprisionamento, o que muda que aumenta as chances em 5%)
+
+- Carta Nova: pode colocar mais uma carta no baralho (ou seja pode escolher qualquer carta que já existe para colocar mais uma no baralho, por exemplo colocando mais uma carta de eletrocussão no baralho do jogador), com isso pode aumentar a chance de aparecer uma carta da qual gosta mais
+
+- Remoção de carta: remove uma carta do baralho do jogador, ou seja se ele escolher a carta de lentidão, o jogo vai tirar uma das cartas de lentidão, assim voce pode diminuir a chance de aparecer uma carta da qual não gosta
+
+Descrição mais detalhada de cada item Básico:
+
+-Colar da sorte: Começa a próxima batalha, com +2 de dano no seu tiro (para o primeiro tiro, como se fosse uma bala amaldiçoada)
+
+-Colete: Da ao jogador 3 de escudo na próxima batalha
+	
+-Casaco de Lodo: reduz o dano do efeito de sangramento do próximo inimigo em -1 (durante toda a batalha)
+
+-Crânio de Lodo: O jogador tem 4 de energia na próxima batalha inteira
+	
+-Faca Afiada: o dano de sangramento para a próxima batalha aumenta em +1 (ao final da batalha acaba)
+	
+-Cicatrizante: recupera 4 de vida do investigador
+	
+-Radio paranormal: reduz os danos do próximo inimigo em 1
+
 # Código:
 
 Detalhes do código é que eu tive que mudar os textos do jogo pois cada acento e "ç" estava aparecendo de forma errada. Então adaptei os textos tirando os acentos, mas acho que isso não impede de entender os textos. 
 
 Decidi colocar esses textos mais descritivos e com história para incrementar essa primeira tarefa (e me fazer dormir menos), e ser mais entendível para quem está jogando. Mas os textos são apenas um print básico se algo acontecer e/ou mostrando atributos dos objetos naquele momento (como vida, energia, escudo, etc).
 
-Para essa quinta tarefa eu adicionei o sistema de mapa no jogo, onde o jogador após o turno pode escolher qual comodo seguir, tudo culminando na suíte principal onde tem a batalha final (o boss), além disso eu implementei que entre cada batalha o heroi recupera 5 de vida, onde na história ele utiliza um Frasco de Lodo. 
-
-Um momento diferente do jogo é a da escada, onde o jogo pergunta se o jogador deseja subir as escadas, caso escolha que sim, o jogo continue, porém caso escolhe não o jogo acaba, pois o heroi fugiu de medo da mansão. 
-
-Por fim, também foi adicionado casos de teste para o projeto
+Para essa sexta tarefa eu adicionei um pequeno sistema de progressão, onde após cada batalha o jogador pode escolher entre algumas opções no qual vai dar bonus para ele de algum jeito, isso aumentou ainda mais a estratégia e o lado de sorte do jogo na minha visão. 
 
 # Como rodar o projeto
 
